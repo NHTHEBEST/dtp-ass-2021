@@ -12,41 +12,39 @@ namespace OX
 {
     public partial class OXGAME : UserControl
     {
-        Tile[] Tiles;
-        //public OXA oxa;
+        readonly Tile[] Tiles;
+     
 
         public OXGAME()
         {
             InitializeComponent();
             Tiles = new Tile[]{ tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9};
             foreach (Tile x in Tiles)
+            {
                 x.Click += Tile_Click;
-            //oxa = (OXA)Parent;
+            }
 
         }
         public Players[] State 
         { 
             get 
             {
-                Players[] r1 = { tile1.State, tile2.State, tile3.State };
-                Players[] r2 = { tile4.State, tile5.State, tile6.State };
-                Players[] r3 = { tile7.State, tile8.State, tile9.State };
-
-                Players[][] s = { r1, r2, r3 };
-                return new Players[]{ tile1.State, tile2.State, tile3.State,tile4.State, tile5.State, tile6.State,tile7.State, tile8.State, tile9.State};
+            
+ 
+                return new Players[]{ tile1.State, tile2.State, tile3.State, tile4.State, tile5.State, tile6.State,tile7.State, tile8.State, tile9.State };
             } 
         }
         public void setState(Players winner)
         {
             foreach (var item in Tiles)
             {
-//                item.Clicked = true;
+
                 item.State = Winner;
                 item.Refresh();
             }
             
         }
-        (int t1, int t2, int t3)[] WinCombos =
+        readonly (int t1, int t2, int t3)[] WinCombos =
         {
             (1,2,3),
             (4,5,6),
@@ -68,9 +66,13 @@ namespace OX
                     Players t2 = State[wc.t2 - 1];
                     Players t3 = State[wc.t3 - 1];
                     if (t1 == Players.Nobody)
+                    {
                         continue;
-                    if (t1 == t2 && t2 == t3 && t1 == t3)
+                    }
+                    if ((t1 == t2) && (t2 == t3) && (t1 == t3))
+                    {
                         return t1;
+                    }
                 }
                 return Players.Nobody;
             }
@@ -78,11 +80,18 @@ namespace OX
 
         private void Tile_Click(object sender, EventArgs e)
         {
-            //OnClick(e);
-            if (Enabled)
+
+            if (Enabled && !OXA.InetrTurn)
             {
                 if (Winner != Players.Nobody)
+                {
                     setState(Winner);
+                    foreach (var item in Tiles)
+                    {
+                        item.State = Winner;
+                        item.Refresh();
+                    }
+                }
                 else
                 {
                     if (!((Tile)sender).Clicked)
@@ -102,27 +111,22 @@ namespace OX
                     }
                     foreach (var item in Tiles)
                     {
-                        //item.NextSet = _turn;
+
                         item.Refresh();
                     }
                 }
-                if (Winner != Players.Nobody)
-                    foreach (var item in Tiles)
-                    {
-                        item.State = Winner;
-                        item.Refresh();
-                    }
 
-                //oxa.AlternativeClick();
+
+                
                 OnClick(e);
                 Refresh();
                 OXA.WaitForWinnerFill = false;
             }
         }
 
-        public Players _turn = Players.Player1;
+         Players _turn = Players.Player1;
 
-        public Players Turn { get { return _turn; } set { _turn = value; foreach (var item in Tiles) item.NextSet = value; } }
+        public Players Turn { get { return _turn; } set { _turn = value; foreach (var item in Tiles) { item.NextSet = value; } } }
 
         
 
@@ -130,8 +134,35 @@ namespace OX
         {
             if (!OXA.InetrTurn)
             {
-                
-                
+                new Thread(() =>
+                {
+
+                    while (OXA.WaitForWinnerFill)
+                    {
+                        Thread.Sleep(1);
+                    }
+                    BeginInvoke((MethodInvoker)delegate
+                    {
+                        var winner = OXA.games[a].Winner;
+                        if (winner == Players.Nobody)
+                        {
+                            foreach (var x in OXA.games)
+                            {
+                                x.Enabled = false;
+                            }
+                            OXA.games[a].Enabled = true;
+                        }
+                        else
+                        {
+                            foreach (var x in OXA.games)
+                            {
+                                x.Enabled = true;
+                            }
+                        }
+                    });
+                    OXA.InetrTurn = false;
+                    OXA.WaitForWinnerFill = true;
+                }).Start();
             }
         }
 

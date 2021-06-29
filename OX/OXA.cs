@@ -13,10 +13,10 @@ namespace OX
 {
     public partial class OXA : UserControl
     {
-        public static bool InetrTurn = false;
-        public static bool WaitForWinnerFill = true;
-        //static Players Turn_all = Players.Player1;
-        (int t1, int t2, int t3)[] WinCombos =
+        public static bool InetrTurn { get; set; };
+        public static bool WaitForWinnerFill { get; set; } = true;
+        
+        readonly (int t1, int t2, int t3)[] WinCombos =
         {
             (1,2,3),
             (4,5,6),
@@ -28,22 +28,14 @@ namespace OX
             (3,5,7)
         };
         public static OXGAME[] games;
-        Players _turn = Players.Player1;
-        void setTurn(Players turn)
-        {
-            _turn = turn;
-            foreach (var x in games)
-                x.Turn = turn;
-        }
+        
+
         public OXA()
         {
             InitializeComponent();
             games = new OXGAME[] { oxgame1, oxgame2, oxgame6, oxgame3, oxgame4, oxgame5, oxgame7, oxgame8, oxgame9 };
 
-            foreach (OXGAME x in games)
-            {
-               // x.oxa = this;
-            }
+
         }
         public Players[] State
         {
@@ -51,7 +43,9 @@ namespace OX
             {
                 List<Players> states_ = new List<Players>();
                 foreach (var x in games)
+                {
                     states_.Add(x.Winner);
+                }
                 return states_.ToArray();
             }
         }
@@ -74,9 +68,13 @@ namespace OX
                     Players t2 = State[wc.t2 - 1];
                     Players t3 = State[wc.t3 - 1];
                     if (t1 == Players.Nobody)
+                    {
                         continue;
+                    }
                     if (t1 == t2 && t2 == t3 && t1 == t3)
+                    {
                         return t1;
+                    }
                 }
                 return Players.Nobody;
             }
@@ -85,13 +83,18 @@ namespace OX
         public static void SetTurn(Players _turn)
         {
 
-           
+            foreach (var x in games)
+            {
+                x.Turn = _turn;
+            }
         }
 
         public void AlternativeClick()
         {
             if (Winner != Players.Nobody)
+            {
                 setState(Winner);
+            }
         }
 
         private void Tile_Click(object sender, EventArgs e)
@@ -102,20 +105,7 @@ namespace OX
                 Refresh();
             }
 
-            //Players _turn = ((OXGAME)sender).Turn;
-            
 
-
-            //MessageBox.Show("Clicked"+e.ToString());
-            /*switch (turn)
-            {
-                case Players.Player1:
-                    setTurn(Players.Player2);
-                    break;
-                case Players.Player2:
-                    setTurn(Players.Player1);
-                    break;
-            }//*/
 
         }
 

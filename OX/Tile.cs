@@ -30,12 +30,12 @@ namespace OX
         }
 
 
-        public bool Clicked = false;
+        public bool Clicked { get; set; }
         
 
         private void Tile_Click(object sender, EventArgs e)
         {
-            if (!Clicked )//&& !OXA.InetrTurn)
+            if (!Clicked && !OXA.InetrTurn)
             {
                 _state = NextSet;
                 Clicked = true;
@@ -46,7 +46,7 @@ namespace OX
 
         public void OnClick(Players player)
         {
-            //if (!Clicked)// && !OXA.InetrTurn)
+            if (!Clicked && !OXA.InetrTurn)
             {                
                 _state = player;
                 Clicked = true;
@@ -58,7 +58,7 @@ namespace OX
         public new int Width { get { return base.Height; } set { base.Height = value; } }
         public new int Height { get { return base.Height; } set { base.Height = value; } }
 
-        public Players _state = Players.Nobody;
+        private Players _state = Players.Nobody;
         public Color Player1Enabled { get; set; } = Color.Red;
         public Color Player2Enabled { get; set; } = Color.Blue;
         public Color NobodyEnabled { get; set; } = Color.White;
@@ -82,21 +82,25 @@ namespace OX
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            //base.OnPaint(e);
+
             if (Enabled)
-            switch (_state)
             {
-                case Players.Nobody:
-                    e.Graphics.Clear(NobodyEnabled);
-                    break;
-                case Players.Player1:
-                    e.Graphics.Clear(Player1Enabled);
-                    break;
-                case Players.Player2:
-                    e.Graphics.Clear(Player2Enabled);
-                    break;
-    
-            }else
+                switch (_state)
+                {
+                    case Players.Nobody:
+                        e.Graphics.Clear(NobodyEnabled);
+                        break;
+                    case Players.Player1:
+                        e.Graphics.Clear(Player1Enabled);
+                        break;
+                    case Players.Player2:
+                        e.Graphics.Clear(Player2Enabled);
+                        break;
+
+                }
+            }
+            else
+            {
                 switch (_state)
                 {
                     case Players.Nobody:
@@ -109,11 +113,8 @@ namespace OX
                         e.Graphics.Clear(Player2Disabled);
                         break;
                 }
+            }
 
-        }
-
-        private void Tile_Load(object sender, EventArgs e)
-        {
         }
     }
 }

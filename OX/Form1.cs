@@ -16,7 +16,6 @@ namespace OX
         {
             InitializeComponent();
         }
-        Players tmp = Players.Nobody;
-        
+
     }
 }
