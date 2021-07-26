@@ -13,7 +13,7 @@ namespace OX
 {
     public partial class OXA : UserControl
     {
-        public static bool InetrTurn { get; set; };
+        public static bool InetrTurn { get; set; }
         public static bool WaitForWinnerFill { get; set; } = true;
         
         readonly (int t1, int t2, int t3)[] WinCombos =
