@@ -9,7 +9,11 @@ namespace OX
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Load Help Screen Before Showing game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
             Help h = new Help();

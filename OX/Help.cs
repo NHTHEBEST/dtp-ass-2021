@@ -16,7 +16,11 @@ namespace OX
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Close Help Screen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
