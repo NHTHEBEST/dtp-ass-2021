@@ -53,7 +53,7 @@ namespace OX
             foreach (var item in Tiles)
             {
 //                item.Clicked = true;
-                item.State = Winner;
+                item.State = winner;
                 item.Refresh();
             }
             
