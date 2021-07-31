@@ -65,7 +65,7 @@ namespace OX.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Game_Info {
             get {
-                object obj = ResourceManager.GetObject("Game Info", resourceCulture);
+                object obj = ResourceManager.GetObject("Game_Info", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

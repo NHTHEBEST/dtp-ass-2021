@@ -29,10 +29,16 @@ namespace OX
             InitializeComponent();
         }
 
-
-        public bool Clicked { get; set; }
+        /// <summary>
+        /// if tile clicked
+        /// </summary>
+        public bool Clicked = false;
         
-
+        /// <summary>
+        /// tile clcick event handelr
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Tile_Click(object sender, EventArgs e)
         {
             if (!Clicked && !OXA.InetrTurn)
@@ -43,7 +49,10 @@ namespace OX
             }
             Refresh();
         }
-
+        /// <summary>
+        /// run on click sets clicker and clicked
+        /// </summary>
+        /// <param name="player"></param>
         public void OnClick(Players player)
         {
             if (!Clicked && !OXA.InetrTurn)
@@ -55,10 +64,14 @@ namespace OX
             Refresh();
         }
 
-        public new int Width { get { return base.Height; } set { base.Height = value; } }
-        public new int Height { get { return base.Height; } set { base.Height = value; } }
 
-        private Players _state = Players.Nobody;
+        /// <summary>
+        /// state
+        /// </summary>
+        public Players _state = Players.Nobody;
+        /// <summary>
+        /// defualt colors
+        /// </summary>
         public Color Player1Enabled { get; set; } = Color.Red;
         public Color Player2Enabled { get; set; } = Color.Blue;
         public Color NobodyEnabled { get; set; } = Color.White;
@@ -66,8 +79,13 @@ namespace OX
         public Color Player2Disabled { get; set; } = Color.DarkBlue;
         public Color NobodyDisabled { get; set; } = Color.Gray;
 
-        
+        /// <summary>
+        /// next turn
+        /// </summary>
         public Players NextSet { get; set; } = Players.Player1;
+        /// <summary>
+        /// state of tile
+        /// </summary>
         public Players State {
             get
             {
@@ -79,28 +97,27 @@ namespace OX
                 Refresh();
             } 
         }
-
+        /// <summary>
+        /// ovired the paint function
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
-
+            // if enabled paint with colors stade ubove
             if (Enabled)
+            switch (_state)
             {
-                switch (_state)
-                {
-                    case Players.Nobody:
-                        e.Graphics.Clear(NobodyEnabled);
-                        break;
-                    case Players.Player1:
-                        e.Graphics.Clear(Player1Enabled);
-                        break;
-                    case Players.Player2:
-                        e.Graphics.Clear(Player2Enabled);
-                        break;
-
-                }
-            }
-            else
-            {
+                case Players.Nobody:
+                    e.Graphics.Clear(NobodyEnabled);
+                    break;
+                case Players.Player1:
+                    e.Graphics.Clear(Player1Enabled);
+                    break;
+                case Players.Player2:
+                    e.Graphics.Clear(Player2Enabled);
+                    break;
+    
+            }else // if disabled paint with disabled colors
                 switch (_state)
                 {
                     case Players.Nobody:
@@ -113,8 +130,16 @@ namespace OX
                         e.Graphics.Clear(Player2Disabled);
                         break;
                 }
-            }
 
+        }
+
+        /// <summary>
+        /// not used
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Tile_Load(object sender, EventArgs e)
+        {
         }
     }
 }
